@@ -69,6 +69,7 @@ const Home = () => {
   } = usePlanetsQuery({ search, page: String(page) });
 
   useEffect(() => {
+    // render the first 2 pages (initial 20 items)
     if (listData?.previous === null) {
       setState((prevState) => ({
         ...prevState,
@@ -90,6 +91,7 @@ const Home = () => {
     );
   }, [listData?.results, climate, sort]);
 
+  // Sort By Max Values and Alphabetical Ascending
   const filteredSortedListData = useMemo(() => {
     if (sort) {
       return sortByMaxAndAlphabetical(filteredListData, sort);
@@ -98,6 +100,7 @@ const Home = () => {
     }
   }, [filteredListData, sort]);
 
+  // Change Filter By Climate
   const handleClimateChange = useCallback(
     (id: string | null) => {
       if (id === climate) return;
@@ -148,6 +151,7 @@ const Home = () => {
     ));
   }, [planetsClimateTypes, climate]);
 
+  // Selected Planet for Modal
   const selectedPlanet = useMemo(() => {
     return listData?.results?.find((item) => item?.name === selectedId);
   }, [listData?.results, selectedId]);
@@ -282,7 +286,7 @@ const Home = () => {
             </InfiniteScrollList>
           )}
 
-          {listLoading || Number(currentPageLoaded ?? 0) < 2 ? (
+          {listLoading || currentPageLoaded < 2 ? (
             <Box width="100%" display="flex" justifyContent="center" mt="3.625rem">
               <Loader />
             </Box>
