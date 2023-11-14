@@ -153,12 +153,13 @@ const Home = () => {
   }, [listData?.results, selectedId]);
 
   const totalPages = listData?.count ? listData.count / 10 : 1;
+  const currentPageLoaded = Number(listData?.currentPage ?? 0);
 
   return (
     <>
       <GridContainer>
         <Box>
-          {listLoading || Number(listData.currentPage) < 2 ? (
+          {listLoading || currentPageLoaded < 2 ? (
             <Box width="100%" display="flex" justifyContent="center" mt="3.625rem">
               <Loader />
             </Box>
@@ -247,43 +248,41 @@ const Home = () => {
           )}
 
           {/* card list of planets */}
-          {filteredSortedListData?.length > 0 &&
-            !listLoading &&
-            Number(listData.currentPage) >= 2 && (
-              <InfiniteScrollList
-                hasMore={totalPages > page && Number(listData.currentPage) === page && !listLoading}
-                loadMore={(nextPage) => {
-                  if (Number(listData.currentPage) === page && !listLoading) {
-                    setState((prevState) => ({
-                      ...prevState,
-                      page: nextPage,
-                    }));
-                  }
-                }}
-                threshold={50}
-                className="listContainer"
-                loader={
-                  <Box width="100%" display="flex" justifyContent="center">
-                    <Loader />
-                  </Box>
+          {filteredSortedListData?.length > 0 && !listLoading && currentPageLoaded >= 2 && (
+            <InfiniteScrollList
+              hasMore={totalPages > page}
+              loadMore={() => {
+                if (currentPageLoaded === page && !listLoading) {
+                  setState((prevState) => ({
+                    ...prevState,
+                    page: prevState.page + 1,
+                  }));
                 }
-              >
-                {filteredSortedListData?.map((item) => (
-                  <Card
-                    key={`planet_${item?.name?.toString()}`}
-                    title={item?.name}
-                    description={`${item?.name} is a ${item?.climate} planet with ${item?.terrain} terrain. It has a population of ${item?.population} inhabitants, and its diameter is ${item?.diameter} km.`}
-                    onClick={() =>
-                      setState((prevState) => ({ ...prevState, selectedId: item?.name }))
-                    }
-                    size="medium"
-                    cursor="pointer"
-                  />
-                ))}
-              </InfiniteScrollList>
-            )}
+              }}
+              threshold={50}
+              className="listContainer"
+              loader={
+                <Box width="100%" display="flex" justifyContent="center">
+                  <Loader />
+                </Box>
+              }
+            >
+              {filteredSortedListData?.map((item) => (
+                <Card
+                  key={`planet_${item?.name?.toString()}`}
+                  title={item?.name}
+                  description={`${item?.name} is a ${item?.climate} planet with ${item?.terrain} terrain. It has a population of ${item?.population} inhabitants, and its diameter is ${item?.diameter} km.`}
+                  onClick={() =>
+                    setState((prevState) => ({ ...prevState, selectedId: item?.name }))
+                  }
+                  size="medium"
+                  cursor="pointer"
+                />
+              ))}
+            </InfiniteScrollList>
+          )}
 
-          {listLoading || Number(listData.currentPage) < 2 ? (
+          {listLoading || Number(currentPageLoaded ?? 0) < 2 ? (
             <Box width="100%" display="flex" justifyContent="center" mt="3.625rem">
               <Loader />
             </Box>
