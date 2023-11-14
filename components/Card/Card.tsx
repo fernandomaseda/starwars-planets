@@ -44,7 +44,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
     },
     ref
   ) => {
-    if (loading) return <Skeleton {...rest} />;
+    if (loading) return <Skeleton {...rest} containerTestId="skeleton-component" />;
     return (
       <CardContainer
         ref={ref}
@@ -59,6 +59,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
         hoverEffect={hoverEffect}
         boxShadow={boxShadow}
         onClick={() => onClick()}
+        data-testid="card-container"
         {...rest}
       >
         {img && (

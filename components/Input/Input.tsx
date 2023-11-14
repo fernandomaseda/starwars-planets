@@ -2,11 +2,10 @@
 import React, { memo, forwardRef, InputHTMLAttributes, ReactNode } from 'react';
 import Skeleton from 'react-loading-skeleton';
 // @Config
-import { fromInputWrapper } from '@utils/formHelper';
+import { fromInputWrapper, FormInputProps } from '@utils/formHelper';
 // @styles
 import { StyledInput, PrefixContainer, SuffixContainer, StyledBox } from './styles';
 import { SpaceProps, DisplayProps, LayoutProps } from 'styled-system';
-import { FormInputProps } from '@utils/formHelper';
 
 export interface InputProps extends SpaceProps, DisplayProps, LayoutProps {
   formInputProps: FormInputProps;
