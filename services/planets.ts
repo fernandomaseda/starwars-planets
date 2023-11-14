@@ -60,13 +60,19 @@ export const usePlanetsQuery = (queryParams: { search?: string; page: string }) 
   const queryParamsString = searchParams.toString();
   return useQuery(['planets', queryParams], () => fetchPlanets(queryParamsString), {
     onSuccess: (data) => {
-      if (search) return;
-      lastResults.current = [...lastResults.current, ...data.results];
-      QueryClient.setQueryData(['planets', queryParams], {
-        ...data,
-        results: lastResults.current,
-        currentPage: queryParams.page,
-      });
+      if (!search) {
+        lastResults.current = [...lastResults.current, ...data.results];
+        QueryClient.setQueryData(['planets', queryParams], {
+          ...data,
+          results: lastResults.current,
+          currentPage: queryParams.page,
+        });
+      } else {
+        QueryClient.setQueryData(['planets', queryParams], {
+          ...data,
+          currentPage: queryParams.page,
+        });
+      }
     },
   });
 };
